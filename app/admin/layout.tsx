@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { createServerClient } from "@/lib/supabase/server";
 
 export default async function AdminLayout({
@@ -7,11 +7,15 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Use the anon client with the cookie-based session for auth checks
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") ?? "";
+
+  if (pathname === "/admin/login") {
+    return <>{children}</>;
+  }
+
   const cookieStore = await cookies();
   const allCookies = cookieStore.getAll();
-
-  // Build a minimal auth check using the service client
   const supabase = createServerClient();
   const accessToken = allCookies.find((c) => c.name.includes("access-token"))?.value;
 
