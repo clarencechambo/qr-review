@@ -9,6 +9,16 @@ interface PurchaseReasonStepProps {
   onBack: () => void;
 }
 
+const PRESETS = [
+  "Good prices",
+  "Great selection",
+  "Friendly staff",
+  "Convenience / location",
+  "Quality products",
+  "A specific deal or promotion",
+  "Other",
+];
+
 export default function PurchaseReasonStep({
   value,
   onChange,
@@ -16,6 +26,11 @@ export default function PurchaseReasonStep({
   onBack,
 }: PurchaseReasonStepProps) {
   const [error, setError] = useState("");
+
+  function handlePreset(preset: string) {
+    onChange(preset);
+    setError("");
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -26,19 +41,41 @@ export default function PurchaseReasonStep({
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">What made you buy today?</h2>
-      <p className="text-gray-600 mb-6">The one thing that sealed the deal.</p>
+      <h2 className="text-2xl font-bold mb-2 text-gray-900">What made you buy today?</h2>
+      <p className="text-gray-800 mb-4">The one thing that sealed the deal.</p>
+
+      <div className="flex flex-wrap gap-2 mb-4">
+        {PRESETS.map((preset) => (
+          <button
+            key={preset}
+            type="button"
+            onClick={() => handlePreset(preset)}
+            className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+              value === preset
+                ? "bg-black text-white border-black"
+                : "bg-white text-gray-900 border-gray-400 hover:border-black"
+            }`}
+          >
+            {preset}
+          </button>
+        ))}
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="e.g. Great selection, friendly staff, good price…"
-          rows={4}
-          className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black resize-none"
+          placeholder="Or type your own reason…"
+          rows={3}
+          className="w-full border border-gray-400 rounded-xl px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black resize-none"
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <div className="flex gap-3">
-          <button type="button" onClick={onBack} className="flex-1 border border-gray-300 rounded-xl py-3 font-semibold">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex-1 border border-gray-400 rounded-xl py-3 font-semibold text-gray-900"
+          >
             Back
           </button>
           <button type="submit" className="flex-1 bg-black text-white rounded-xl py-3 font-semibold">
