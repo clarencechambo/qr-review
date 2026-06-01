@@ -34,15 +34,15 @@ export default function PhoneStep({ onNext }: PhoneStepProps) {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">Welcome!</h2>
-      <p className="text-gray-600 mb-6">Enter your phone number to get started.</p>
+      <h2 className="text-2xl font-bold mb-2 text-gray-900">Welcome!</h2>
+      <p className="text-gray-800 mb-6">Enter your phone number to get started.</p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="tel"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           placeholder="e.g. 0712 345 678"
-          className="w-full border border-gray-300 rounded-xl px-4 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-black"
+          className="w-full border border-gray-400 rounded-xl px-4 py-3 text-lg text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black"
           required
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}

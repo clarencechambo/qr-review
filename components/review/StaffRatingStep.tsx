@@ -49,8 +49,8 @@ export default function StaffRatingStep({
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">How was our staff?</h2>
-      <p className="text-gray-600 mb-6">Rate your experience with our team.</p>
+      <h2 className="text-2xl font-bold mb-2 text-gray-900">How was our staff?</h2>
+      <p className="text-gray-800 mb-6">Rate your experience with our team.</p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex justify-center gap-3">
           {STARS.map((star) => (
@@ -67,16 +67,16 @@ export default function StaffRatingStep({
           ))}
         </div>
         {value !== null && (
-          <p className="text-center text-sm text-gray-500">
+          <p className="text-center text-sm font-medium text-gray-900">
             {value === 5 ? "Excellent!" : value === 4 ? "Great" : value === 3 ? "Good" : value === 2 ? "Needs improvement" : "Poor"}
           </p>
         )}
         {value !== null && value <= 2 && feedback && (
-          <p className="text-sm text-gray-500 italic text-center">"{feedback}"</p>
+          <p className="text-sm text-gray-700 italic text-center">"{feedback}"</p>
         )}
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <div className="flex gap-3 pt-2">
-          <button type="button" onClick={onBack} className="flex-1 border border-gray-300 rounded-xl py-3 font-semibold">
+          <button type="button" onClick={onBack} className="flex-1 border border-gray-400 rounded-xl py-3 font-semibold text-gray-900">
             Back
           </button>
           <button
@@ -92,14 +92,14 @@ export default function StaffRatingStep({
       {showFeedbackModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
-            <h3 className="text-lg font-bold mb-2">We're sorry to hear that.</h3>
-            <p className="text-gray-600 text-sm mb-4">What could we have done better?</p>
+            <h3 className="text-lg font-bold mb-2 text-gray-900">We're sorry to hear that.</h3>
+            <p className="text-gray-800 text-sm mb-4">What could we have done better?</p>
             <textarea
               value={modalFeedback}
               onChange={(e) => setModalFeedback(e.target.value)}
               rows={3}
               placeholder="Tell us more…"
-              className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black resize-none mb-4"
+              className="w-full border border-gray-400 rounded-xl px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black resize-none mb-4"
             />
             <button
               onClick={handleModalSubmit}

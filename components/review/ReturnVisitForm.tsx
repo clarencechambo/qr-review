@@ -35,8 +35,8 @@ export default function ReturnVisitForm({ phone, onDone }: ReturnVisitFormProps)
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">Welcome back!</h2>
-      <p className="text-gray-600 mb-6">
+      <h2 className="text-2xl font-bold mb-2 text-gray-900">Welcome back!</h2>
+      <p className="text-gray-800 mb-6">
         Anything different from your last experience? We'd love to know.
       </p>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -45,7 +45,7 @@ export default function ReturnVisitForm({ phone, onDone }: ReturnVisitFormProps)
           onChange={(e) => setNote(e.target.value)}
           placeholder="What's new, better, or worse since your last visit?"
           rows={5}
-          className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black resize-none"
+          className="w-full border border-gray-400 rounded-xl px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-black resize-none"
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <button
