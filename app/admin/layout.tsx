@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { cookies, headers } from "next/headers";
-import { createServerClient } from "@/lib/supabase/server";
+import { headers } from "next/headers";
+import { createServerAuthClient } from "@/lib/supabase/server";
 import SignOutButton from "@/components/admin/SignOutButton";
 
 const NAV = [
@@ -23,16 +23,8 @@ export default async function AdminLayout({
     return <>{children}</>;
   }
 
-  const cookieStore = await cookies();
-  const allCookies = cookieStore.getAll();
-  const supabase = createServerClient();
-  const accessToken = allCookies.find((c) => c.name.includes("access-token"))?.value;
-
-  if (!accessToken) {
-    redirect("/admin/login");
-  }
-
-  const { data: { user } } = await supabase.auth.getUser(accessToken);
+  const supabase = await createServerAuthClient();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/admin/login");
 
   return (
