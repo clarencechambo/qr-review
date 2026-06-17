@@ -78,68 +78,77 @@ export default function ReviewPage() {
   const showProgress = step !== "phone" && step !== "done" && !isReturning;
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 w-full max-w-md p-8">
-        {showProgress && (
-          <ProgressBar current={STEP_NUMBER[step]} total={TOTAL_STEPS} />
-        )}
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "#F8F9FA" }}>
+      {/* Brand header */}
+      <div style={{ backgroundColor: "#E8174B" }} className="text-white text-center py-5 px-4 shadow-sm">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] opacity-80 mb-0.5">Discount Centre</p>
+        <h1 className="text-xl font-bold tracking-tight">Share Your Experience</h1>
+      </div>
 
-        {step === "phone" && (
-          <PhoneStep onNext={handlePhoneNext} />
-        )}
+      {/* Form card */}
+      <div className="flex-1 flex items-start justify-center p-4 pt-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 w-full max-w-md p-7">
+          {showProgress && (
+            <ProgressBar current={STEP_NUMBER[step]} total={TOTAL_STEPS} />
+          )}
 
-        {step === "discovery" && (
-          <DiscoveryStep
-            value={form.discovery_channel}
-            otherValue={form.discovery_other}
-            onChange={(ch: DiscoveryChannel, other: string) => {
-              update("discovery_channel", ch);
-              update("discovery_other", other);
-            }}
-            onNext={() => setStep("price")}
-            onBack={() => setStep("phone")}
-          />
-        )}
+          {step === "phone" && (
+            <PhoneStep onNext={handlePhoneNext} />
+          )}
 
-        {step === "price" && (
-          <PriceStep
-            value={form.price_rating}
-            onChange={(n) => update("price_rating", n)}
-            onNext={() => setStep("purchase")}
-            onBack={() => setStep("discovery")}
-          />
-        )}
+          {step === "discovery" && (
+            <DiscoveryStep
+              value={form.discovery_channel}
+              otherValue={form.discovery_other}
+              onChange={(ch: DiscoveryChannel, other: string) => {
+                update("discovery_channel", ch);
+                update("discovery_other", other);
+              }}
+              onNext={() => setStep("price")}
+              onBack={() => setStep("phone")}
+            />
+          )}
 
-        {step === "purchase" && (
-          <PurchaseReasonStep
-            value={form.purchase_reason}
-            onChange={(v) => update("purchase_reason", v)}
-            onNext={() => setStep("staff")}
-            onBack={() => setStep("price")}
-          />
-        )}
+          {step === "price" && (
+            <PriceStep
+              value={form.price_rating}
+              onChange={(n) => update("price_rating", n)}
+              onNext={() => setStep("purchase")}
+              onBack={() => setStep("discovery")}
+            />
+          )}
 
-        {step === "staff" && (
-          <StaffRatingStep
-            value={form.staff_rating}
-            feedback={form.staff_feedback}
-            onRatingChange={(n) => update("staff_rating", n)}
-            onFeedbackChange={(t) => update("staff_feedback", t)}
-            onNext={handleSubmit}
-            onBack={() => setStep("purchase")}
-            loading={submitting}
-          />
-        )}
+          {step === "purchase" && (
+            <PurchaseReasonStep
+              value={form.purchase_reason}
+              onChange={(v) => update("purchase_reason", v)}
+              onNext={() => setStep("staff")}
+              onBack={() => setStep("price")}
+            />
+          )}
 
-        {isReturning && step === "done" && (
-          <ReturnVisitForm phone={form.phone} onDone={() => setIsReturning(false)} />
-        )}
+          {step === "staff" && (
+            <StaffRatingStep
+              value={form.staff_rating}
+              feedback={form.staff_feedback}
+              onRatingChange={(n) => update("staff_rating", n)}
+              onFeedbackChange={(t) => update("staff_feedback", t)}
+              onNext={handleSubmit}
+              onBack={() => setStep("purchase")}
+              loading={submitting}
+            />
+          )}
 
-        {!isReturning && step === "done" && <ThankYou />}
+          {isReturning && step === "done" && (
+            <ReturnVisitForm phone={form.phone} onDone={() => setIsReturning(false)} />
+          )}
 
-        {formError && (
-          <p className="text-red-500 text-sm text-center mt-4">{formError}</p>
-        )}
+          {!isReturning && step === "done" && <ThankYou />}
+
+          {formError && (
+            <p className="text-red-500 text-sm text-center mt-4">{formError}</p>
+          )}
+        </div>
       </div>
     </div>
   );
