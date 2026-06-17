@@ -13,8 +13,8 @@ export default async function ResponsesPage() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">All Responses</h2>
-      <div className="bg-white border border-gray-200 rounded-2xl p-6">
+      <h2 className="text-2xl font-bold text-gray-900">All Responses</h2>
+      <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
         <ResponsesTable reviews={(reviews ?? []) as Review[]} />
       </div>
     </div>
