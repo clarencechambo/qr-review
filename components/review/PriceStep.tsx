@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import OptionButton from "@/components/review/OptionButton";
 
 interface PriceStepProps {
   value: number | null;
@@ -32,24 +33,14 @@ export default function PriceStep({ value, onChange, onNext, onBack }: PriceStep
       <h2 className="text-2xl font-bold mb-1 text-gray-900">How were our prices?</h2>
       <p className="text-gray-600 mb-5 text-sm">Compared to other stores you've visited.</p>
       <form onSubmit={handleSubmit} className="space-y-2.5">
-        {OPTIONS.map(({ n, label }) => {
-          const selected = value === n;
-          return (
-            <button
-              key={n}
-              type="button"
-              onClick={() => onChange(n)}
-              className="w-full text-left border rounded-full px-5 py-3 text-sm font-medium transition-all"
-              style={{
-                backgroundColor: selected ? "#E8174B" : "#fff",
-                borderColor: selected ? "#E8174B" : "#e5e7eb",
-                color: selected ? "#fff" : "#111827",
-              }}
-            >
-              {label}
-            </button>
-          );
-        })}
+        {OPTIONS.map(({ n, label }) => (
+          <OptionButton
+            key={n}
+            label={label}
+            selected={value === n}
+            onClick={() => onChange(n)}
+          />
+        ))}
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <div className="flex gap-3 pt-2">
           <button

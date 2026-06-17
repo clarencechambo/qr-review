@@ -4,6 +4,7 @@ import AtRiskTable from "@/components/admin/AtRiskTable";
 import BarList from "@/components/admin/charts/BarList";
 import DonutChart from "@/components/admin/charts/DonutChart";
 import TrendChart from "@/components/admin/charts/TrendChart";
+import SentimentBar from "@/components/admin/SentimentBar";
 import { IconChurn, IconRetention, IconReviews } from "@/components/admin/icons";
 import {
   retentionStats,
@@ -11,6 +12,7 @@ import {
   channelRetention,
   ratingDistribution,
   reviewsOverTime,
+  sentimentDistribution,
 } from "@/lib/analytics";
 import type { Review, ReturnVisit } from "@/lib/types";
 
@@ -47,14 +49,11 @@ export default async function AnalyticsPage() {
   const churn = retentionStats(reviews, returns);
   const atRisk = atRiskCustomers(reviews);
   const channels = channelRetention(reviews, returns);
-  const staffDist = ratingDistribution(reviews, "staff_rating");
+  const sentiment = sentimentDistribution(reviews);
   const priceDist = ratingDistribution(reviews, "price_rating");
   const trend = reviewsOverTime(reviews);
 
   const negativeFeedback = reviews.filter((r) => r.staff_feedback && r.staff_feedback.trim());
-
-  const ratingColor = (rating: number) =>
-    rating <= 2 ? "#ef4444" : rating === 3 ? "#f59e0b" : "#10b981";
 
   return (
     <div className="space-y-8">
@@ -129,14 +128,8 @@ export default async function AnalyticsPage() {
 
       {/* Distributions */}
       <div className="grid lg:grid-cols-2 gap-6">
-        <Card title="Staff rating distribution">
-          <BarList
-            rows={staffDist.map((d) => ({
-              label: `${d.rating} ★`,
-              value: d.count,
-              color: ratingColor(d.rating),
-            }))}
-          />
+        <Card title="Staff sentiment">
+          <SentimentBar slices={sentiment} />
         </Card>
         <Card title="Price perception">
           <BarList

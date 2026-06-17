@@ -6,18 +6,25 @@ interface ProgressBarProps {
 }
 
 export default function ProgressBar({ current, total }: ProgressBarProps) {
-  const pct = Math.round((current / total) * 100);
   return (
-    <div className="w-full mb-6">
-      <div className="flex justify-between text-xs font-medium mb-1.5">
-        <span className="text-[#E8174B]">Step {current} of {total}</span>
-        <span className="text-gray-500">{pct}%</span>
+    <div className="w-full mb-7">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: "#E8174B" }}>
+          Step {current} of {total}
+        </span>
+        <span className="text-xs font-medium text-gray-400">
+          {Math.round((current / total) * 100)}%
+        </span>
       </div>
-      <div className="w-full bg-gray-100 rounded-full h-1.5">
-        <div
-          className="h-1.5 rounded-full transition-all duration-500"
-          style={{ width: `${pct}%`, backgroundColor: "#E8174B" }}
-        />
+      {/* Segmented progress */}
+      <div className="flex gap-1.5">
+        {Array.from({ length: total }).map((_, i) => (
+          <div
+            key={i}
+            className="h-1.5 flex-1 rounded-full transition-colors duration-500"
+            style={{ backgroundColor: i < current ? "#E8174B" : "#f0f0f1" }}
+          />
+        ))}
       </div>
     </div>
   );

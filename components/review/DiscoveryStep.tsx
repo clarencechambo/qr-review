@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { DISCOVERY_OPTIONS, type DiscoveryChannel } from "@/lib/types";
+import OptionButton from "@/components/review/OptionButton";
 
 interface DiscoveryStepProps {
   value: DiscoveryChannel | "";
@@ -40,24 +41,14 @@ export default function DiscoveryStep({
       <h2 className="text-2xl font-bold mb-1 text-gray-900">How did you find us?</h2>
       <p className="text-gray-600 mb-5 text-sm">Pick the option that fits best.</p>
       <form onSubmit={handleSubmit} className="space-y-2.5">
-        {DISCOVERY_OPTIONS.map((opt) => {
-          const selected = value === opt;
-          return (
-            <button
-              key={opt}
-              type="button"
-              onClick={() => handleSelect(opt)}
-              className="w-full text-left border rounded-full px-5 py-3 text-sm font-medium transition-all"
-              style={{
-                backgroundColor: selected ? "#E8174B" : "#fff",
-                borderColor: selected ? "#E8174B" : "#e5e7eb",
-                color: selected ? "#fff" : "#111827",
-              }}
-            >
-              {opt}
-            </button>
-          );
-        })}
+        {DISCOVERY_OPTIONS.map((opt) => (
+          <OptionButton
+            key={opt}
+            label={opt}
+            selected={value === opt}
+            onClick={() => handleSelect(opt)}
+          />
+        ))}
         {value === "Other" && (
           <textarea
             value={otherValue}

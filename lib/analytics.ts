@@ -73,6 +73,72 @@ export function ratingDistribution(
   }));
 }
 
+// Sentiment tiers map staff_rating 1–5 → Bad/Poor/Average/Great/Excellent.
+export const SENTIMENT_TIERS = [
+  { key: "Bad", rating: 1, color: "#ef4444" },
+  { key: "Poor", rating: 2, color: "#f97316" },
+  { key: "Average", rating: 3, color: "#f59e0b" },
+  { key: "Great", rating: 4, color: "#22c55e" },
+  { key: "Excellent", rating: 5, color: "#10b981" },
+] as const;
+
+export type SentimentKey = (typeof SENTIMENT_TIERS)[number]["key"];
+
+export interface SentimentSlice {
+  key: SentimentKey;
+  rating: number;
+  color: string;
+  count: number;
+  percent: number;
+}
+
+export function sentimentDistribution(reviews: Review[]): SentimentSlice[] {
+  const total = reviews.length;
+  return SENTIMENT_TIERS.map((tier) => {
+    const count = reviews.filter((r) => r.staff_rating === tier.rating).length;
+    return {
+      key: tier.key,
+      rating: tier.rating,
+      color: tier.color,
+      count,
+      percent: total ? Math.round((count / total) * 100) : 0,
+    };
+  });
+}
+
+export function sentimentForRating(rating: number): { key: SentimentKey; color: string } {
+  const tier = SENTIMENT_TIERS.find((t) => t.rating === rating) ?? SENTIMENT_TIERS[2];
+  return { key: tier.key, color: tier.color };
+}
+
+export function averageRating(reviews: Review[], field: "staff_rating" | "price_rating" = "staff_rating"): number {
+  if (!reviews.length) return 0;
+  return Math.round((reviews.reduce((s, r) => s + r[field], 0) / reviews.length) * 10) / 10;
+}
+
+export interface GrowthStats {
+  current: number;
+  previous: number;
+  percent: number; // signed
+}
+
+// Compares this calendar month's review count to last month's.
+export function growthStats(reviews: Review[]): GrowthStats {
+  const now = new Date();
+  const startThis = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+  const startLast = new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime();
+
+  let current = 0;
+  let previous = 0;
+  for (const r of reviews) {
+    const t = new Date(r.created_at).getTime();
+    if (t >= startThis) current++;
+    else if (t >= startLast) previous++;
+  }
+  const percent = previous ? Math.round(((current - previous) / previous) * 100) : current > 0 ? 100 : 0;
+  return { current, previous, percent };
+}
+
 export interface WeekBucket {
   weekLabel: string;
   count: number;

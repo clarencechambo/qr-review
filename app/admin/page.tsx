@@ -2,14 +2,22 @@ import { createServerClient } from "@/lib/supabase/server";
 import StatsCard from "@/components/admin/StatsCard";
 import BarList from "@/components/admin/charts/BarList";
 import DonutChart from "@/components/admin/charts/DonutChart";
+import SentimentBar from "@/components/admin/SentimentBar";
+import Stars from "@/components/admin/Stars";
 import {
   IconReviews,
   IconReturn,
   IconRetention,
   IconStaff,
-  IconPrice,
+  IconTrendUp,
+  IconTrendDown,
 } from "@/components/admin/icons";
-import { retentionStats } from "@/lib/analytics";
+import {
+  retentionStats,
+  sentimentDistribution,
+  averageRating,
+  growthStats,
+} from "@/lib/analytics";
 import { DISCOVERY_OPTIONS, type Review, type ReturnVisit } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -26,14 +34,11 @@ export default async function AdminDashboard() {
   const returns: ReturnVisit[] = returnsData ?? [];
   const total = reviews.length;
 
-  const avgPrice = total
-    ? (reviews.reduce((s, r) => s + r.price_rating, 0) / total).toFixed(1)
-    : "—";
-  const avgStaff = total
-    ? (reviews.reduce((s, r) => s + r.staff_rating, 0) / total).toFixed(1)
-    : "—";
-
+  const avgStaff = averageRating(reviews, "staff_rating");
   const churn = retentionStats(reviews, returns);
+  const sentiment = sentimentDistribution(reviews);
+  const growth = growthStats(reviews);
+  const up = growth.percent >= 0;
 
   const discoveryRows = DISCOVERY_OPTIONS.map((opt) => ({
     label: opt,
@@ -41,13 +46,42 @@ export default async function AdminDashboard() {
     color: "#00ADDE",
   }));
 
+  const growthPill =
+    total > 0 ? (
+      <span
+        className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold"
+        style={{
+          backgroundColor: up ? "#10b9811a" : "#ef44441a",
+          color: up ? "#059669" : "#dc2626",
+        }}
+      >
+        {up ? <IconTrendUp /> : <IconTrendDown />}
+        {up ? "+" : ""}
+        {growth.percent}%
+      </span>
+    ) : undefined;
+
   return (
     <div className="space-y-8">
       <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
 
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <StatsCard label="Total Reviews" value={total} accent="#E8174B" icon={<IconReviews />} />
-        <StatsCard label="Return Visits" value={churn.returned} accent="#00ADDE" icon={<IconReturn />} />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatsCard
+          label="Total Reviews"
+          value={total}
+          accent="#E8174B"
+          icon={<IconReviews />}
+          extra={growthPill}
+          sub="vs last month"
+        />
+        <StatsCard
+          label="Average Rating"
+          value={avgStaff || "—"}
+          accent="#f59e0b"
+          icon={<IconStaff />}
+          extra={total > 0 ? <Stars value={Math.round(avgStaff)} /> : undefined}
+          sub="staff experience"
+        />
         <StatsCard
           label="Retention Rate"
           value={total ? `${churn.retentionRate}%` : "—"}
@@ -55,8 +89,12 @@ export default async function AdminDashboard() {
           accent="#10b981"
           icon={<IconRetention />}
         />
-        <StatsCard label="Avg Staff Rating" value={avgStaff} sub="out of 5" accent="#f59e0b" icon={<IconStaff />} />
-        <StatsCard label="Avg Price Rating" value={avgPrice} sub="out of 5" accent="#00ADDE" icon={<IconPrice />} />
+        <StatsCard label="Return Visits" value={churn.returned} accent="#00ADDE" icon={<IconReturn />} />
+      </div>
+
+      <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+        <h3 className="font-semibold text-gray-900 mb-4">Sentiment breakdown</h3>
+        <SentimentBar slices={sentiment} />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">

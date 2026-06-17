@@ -6,9 +6,11 @@ interface StatsCardProps {
   accent?: string;
   /** Optional inline SVG icon. */
   icon?: React.ReactNode;
+  /** Optional node rendered next to the value (e.g. stars or a growth pill). */
+  extra?: React.ReactNode;
 }
 
-export default function StatsCard({ label, value, sub, accent = "#00ADDE", icon }: StatsCardProps) {
+export default function StatsCard({ label, value, sub, accent = "#00ADDE", icon, extra }: StatsCardProps) {
   return (
     <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
       <div className="flex items-center gap-2 mb-3">
@@ -22,7 +24,10 @@ export default function StatsCard({ label, value, sub, accent = "#00ADDE", icon 
         )}
         <p className="text-sm font-medium text-gray-600">{label}</p>
       </div>
-      <p className="text-3xl font-bold text-gray-900">{value}</p>
+      <div className="flex items-center gap-2 flex-wrap">
+        <p className="text-3xl font-bold text-gray-900">{value}</p>
+        {extra}
+      </div>
       {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
     </div>
   );

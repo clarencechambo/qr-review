@@ -34,6 +34,22 @@ export const IconChurn = () => (
   <svg {...base}><path d="M23 18l-9.5-9.5-5 5L1 6" /><polyline points="17 18 23 18 23 12" /></svg>
 );
 
+export const IconUser = () => (
+  <svg {...base}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+);
+
+export const IconTrendUp = () => (
+  <svg {...base} width={14} height={14}><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" /></svg>
+);
+
+export const IconTrendDown = () => (
+  <svg {...base} width={14} height={14}><polyline points="23 18 13.5 8.5 8.5 13.5 1 6" /><polyline points="17 18 23 18 23 12" /></svg>
+);
+
+export const IconSearch = () => (
+  <svg {...base}><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+);
+
 export const EyeIcon = () => (
   <svg {...base} width={18} height={18}><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" /><circle cx="12" cy="12" r="3" /></svg>
 );
