@@ -17,7 +17,7 @@ export default function AtRiskTable({ customers }: AtRiskTableProps) {
   if (customers.length === 0) {
     return (
       <p className="text-sm text-gray-400 py-6 text-center">
-        No at-risk customers — everyone's happy so far. 🎉
+        No at-risk customers — everyone's happy so far.
       </p>
     );
   }

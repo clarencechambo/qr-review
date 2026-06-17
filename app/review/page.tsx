@@ -86,8 +86,8 @@ export default function ReviewPage() {
       </div>
 
       {/* Form card */}
-      <div className="flex-1 flex items-start justify-center p-4 pt-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 w-full max-w-md p-7">
+      <div className="flex-1 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 w-full max-w-md p-7 mx-auto">
           {showProgress && (
             <ProgressBar current={STEP_NUMBER[step]} total={TOTAL_STEPS} />
           )}
