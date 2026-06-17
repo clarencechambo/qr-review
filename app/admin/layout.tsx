@@ -17,7 +17,9 @@ export default async function AdminLayout({
   const headersList = await headers();
   const pathname = headersList.get("x-pathname") ?? "";
 
-  if (pathname === "/admin/login") {
+  // Public auth pages — no session required.
+  const PUBLIC_PATHS = ["/admin/login", "/admin/forgot-password", "/admin/reset-password"];
+  if (PUBLIC_PATHS.includes(pathname)) {
     return <>{children}</>;
   }
 
