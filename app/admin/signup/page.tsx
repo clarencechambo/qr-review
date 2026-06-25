@@ -148,7 +148,7 @@ export default function AdminSignupPage() {
             </button>
 
             <a href="/admin/login" className="block text-center text-sm font-semibold text-gray-500 hover:text-gray-700">
-              Already have an account? Sign in
+              Already have an account? <span style={{ color: "#E8174B" }}>Sign in</span>
             </a>
           </form>
         </div>
