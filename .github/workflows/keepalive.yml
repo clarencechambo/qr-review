@@ -1,0 +1,19 @@
+name: Supabase keep-alive
+
+# Pings the app's health endpoint (which touches Supabase) on a schedule so the
+# free-tier Supabase project never sits idle long enough to auto-pause (~7 days).
+on:
+  schedule:
+    - cron: "0 6 */2 * *" # every 2 days at 06:00 UTC
+  workflow_dispatch: {} # allow manual runs
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping health endpoint
+        run: |
+          echo "Pinging keep-alive endpoint…"
+          curl -fsS --retry 3 --retry-delay 10 https://dcl-reviews.up.railway.app/api/health
+          echo ""
+          echo "Done."
