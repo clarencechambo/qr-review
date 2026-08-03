@@ -29,6 +29,7 @@ export default function ReviewPage() {
   const [formError, setFormError] = useState("");
 
   const [form, setForm] = useState<ReviewFormState>({
+    name: "",
     phone: "",
     discovery_channel: "",
     discovery_other: "",
@@ -42,8 +43,8 @@ export default function ReviewPage() {
     setForm((f) => ({ ...f, [key]: val }));
   }
 
-  function handlePhoneNext(phone: string, returning: boolean) {
-    update("phone", phone);
+  function handlePhoneNext(phone: string, name: string, returning: boolean) {
+    setForm((f) => ({ ...f, phone, name }));
     setIsReturning(returning);
     setStep(returning ? "done" : "discovery");
   }
@@ -56,6 +57,7 @@ export default function ReviewPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          name: form.name,
           phone_number: form.phone,
           discovery_channel: form.discovery_channel,
           discovery_other: form.discovery_other || undefined,

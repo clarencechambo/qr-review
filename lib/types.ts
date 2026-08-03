@@ -17,6 +17,7 @@ export const DISCOVERY_OPTIONS: DiscoveryChannel[] = [
 
 export interface Review {
   id: string;
+  name?: string | null;
   phone_number: string;
   discovery_channel: DiscoveryChannel;
   discovery_other?: string | null;
@@ -44,6 +45,7 @@ export type FormStep =
   | "done";
 
 export interface ReviewFormState {
+  name: string;
   phone: string;
   discovery_channel: DiscoveryChannel | "";
   discovery_other: string;

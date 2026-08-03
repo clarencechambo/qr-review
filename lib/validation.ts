@@ -10,6 +10,7 @@ const discoveryChannelSchema = z.enum(
 );
 
 export const submitReviewSchema = z.object({
+  name: z.string().min(1, "Please enter your name").max(100),
   phone_number: z
     .string()
     .min(7, "Phone number too short")

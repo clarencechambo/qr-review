@@ -28,7 +28,7 @@ export default function AtRiskTable({ customers }: AtRiskTableProps) {
         <thead>
           <tr className="border-b border-gray-100 text-left text-gray-500">
             <th className="py-3 pr-4 font-semibold">Date</th>
-            <th className="py-3 pr-4 font-semibold">Phone</th>
+            <th className="py-3 pr-4 font-semibold">Customer</th>
             <th className="py-3 pr-4 font-semibold">Staff</th>
             <th className="py-3 pr-4 font-semibold">Price</th>
             <th className="py-3 pr-4 font-semibold">Why at risk</th>
@@ -41,7 +41,16 @@ export default function AtRiskTable({ customers }: AtRiskTableProps) {
               <td className="py-3 pr-4 whitespace-nowrap text-gray-500">
                 {new Date(c.created_at).toLocaleDateString()}
               </td>
-              <td className="py-3 pr-4 font-mono text-gray-900">{maskPhone(c.phone_number)}</td>
+              <td className="py-3 pr-4 text-gray-900 whitespace-nowrap">
+                {c.name ? (
+                  <>
+                    <span className="font-medium">{c.name}</span>
+                    <span className="block text-xs font-mono text-gray-400">{maskPhone(c.phone_number)}</span>
+                  </>
+                ) : (
+                  <span className="font-mono">{maskPhone(c.phone_number)}</span>
+                )}
+              </td>
               <td className="py-3 pr-4 text-yellow-500 whitespace-nowrap">{stars(c.staff_rating)}</td>
               <td className="py-3 pr-4 text-gray-700 whitespace-nowrap">{c.price_rating}/5</td>
               <td className="py-3 pr-4">

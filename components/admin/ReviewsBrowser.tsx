@@ -24,7 +24,7 @@ export default function ReviewsBrowser({ reviews }: ReviewsBrowserProps) {
       }
       if (search.trim()) {
         const q = search.toLowerCase();
-        const hay = `${r.phone_number} ${r.purchase_reason} ${r.staff_feedback ?? ""} ${r.discovery_channel}`.toLowerCase();
+        const hay = `${r.name ?? ""} ${r.phone_number} ${r.purchase_reason} ${r.staff_feedback ?? ""} ${r.discovery_channel}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;

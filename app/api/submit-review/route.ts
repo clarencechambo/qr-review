@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = createServerClient();
-  const { error } = await supabase.from("reviews").insert({
+  const baseRow = {
     phone_number: parsed.data.phone_number,
     discovery_channel: parsed.data.discovery_channel,
     discovery_other: parsed.data.discovery_other ?? null,
@@ -27,7 +27,18 @@ export async function POST(req: NextRequest) {
     purchase_reason: parsed.data.purchase_reason,
     staff_rating: parsed.data.staff_rating,
     staff_feedback: parsed.data.staff_feedback ?? null,
-  });
+  };
+
+  let { error } = await supabase
+    .from("reviews")
+    .insert({ ...baseRow, name: parsed.data.name });
+
+  // Graceful fallback: if the `name` column hasn't been added to the table yet
+  // (Postgres 42703 = undefined_column), save the review without it so
+  // submissions keep working. Names persist automatically once the column exists.
+  if (error && error.code === "42703") {
+    ({ error } = await supabase.from("reviews").insert(baseRow));
+  }
 
   if (error) {
     if (error.code === "23505") {

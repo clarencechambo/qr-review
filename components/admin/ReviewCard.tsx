@@ -38,8 +38,11 @@ export default function ReviewCard({ review }: ReviewCardProps) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <p className="font-semibold text-gray-900 leading-tight">{maskPhone(review.phone_number)}</p>
+              <p className="font-semibold text-gray-900 leading-tight">
+                {review.name || maskPhone(review.phone_number)}
+              </p>
               <p className="text-xs text-gray-400">
+                {review.name ? `${maskPhone(review.phone_number)} · ` : ""}
                 {new Date(review.created_at).toLocaleDateString(undefined, {
                   year: "numeric",
                   month: "short",
