@@ -33,10 +33,16 @@ export async function POST(req: NextRequest) {
     .from("reviews")
     .insert({ ...baseRow, name: parsed.data.name });
 
-  // Graceful fallback: if the `name` column hasn't been added to the table yet
-  // (Postgres 42703 = undefined_column), save the review without it so
-  // submissions keep working. Names persist automatically once the column exists.
-  if (error && error.code === "42703") {
+  // Graceful fallback: if the `name` column hasn't been added to the table yet,
+  // save the review without it so submissions keep working. PostgREST reports an
+  // unknown column via its schema cache as PGRST204; Postgres direct is 42703.
+  // Names persist automatically once the column exists.
+  const missingNameColumn =
+    error &&
+    (error.code === "PGRST204" ||
+      error.code === "42703" ||
+      /'?name'?/i.test(error.message ?? ""));
+  if (missingNameColumn) {
     ({ error } = await supabase.from("reviews").insert(baseRow));
   }
 
