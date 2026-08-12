@@ -7,11 +7,6 @@ interface ReviewCardProps {
   review: Review;
 }
 
-function maskPhone(phone: string) {
-  if (phone.length < 4) return "Customer";
-  return "•••• " + phone.slice(-4);
-}
-
 // Deterministic accent colour per customer so avatars feel distinct.
 const AVATAR_COLORS = ["#E8174B", "#00ADDE", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"];
 function avatarColor(phone: string) {
@@ -39,10 +34,13 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <p className="font-semibold text-gray-900 leading-tight">
-                {review.name || maskPhone(review.phone_number)}
+                {review.name || "Customer"}
               </p>
-              <p className="text-xs text-gray-400">
-                {review.name ? `${maskPhone(review.phone_number)} · ` : ""}
+              <p className="text-xs text-gray-500">
+                <a href={`tel:${review.phone_number}`} className="font-mono select-all hover:underline" style={{ color: "#00ADDE" }}>
+                  {review.phone_number}
+                </a>
+                {" · "}
                 {new Date(review.created_at).toLocaleDateString(undefined, {
                   year: "numeric",
                   month: "short",

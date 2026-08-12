@@ -4,11 +4,6 @@ interface AtRiskTableProps {
   customers: AtRiskCustomer[];
 }
 
-function maskPhone(phone: string) {
-  if (phone.length < 4) return "****";
-  return phone.slice(0, -4).replace(/\d/g, "*") + phone.slice(-4);
-}
-
 function stars(n: number) {
   return "★".repeat(n) + "☆".repeat(5 - n);
 }
@@ -42,14 +37,10 @@ export default function AtRiskTable({ customers }: AtRiskTableProps) {
                 {new Date(c.created_at).toLocaleDateString()}
               </td>
               <td className="py-3 pr-4 text-gray-900 whitespace-nowrap">
-                {c.name ? (
-                  <>
-                    <span className="font-medium">{c.name}</span>
-                    <span className="block text-xs font-mono text-gray-400">{maskPhone(c.phone_number)}</span>
-                  </>
-                ) : (
-                  <span className="font-mono">{maskPhone(c.phone_number)}</span>
-                )}
+                {c.name && <span className="font-medium block">{c.name}</span>}
+                <a href={`tel:${c.phone_number}`} className="text-xs font-mono select-all hover:underline" style={{ color: "#00ADDE" }}>
+                  {c.phone_number}
+                </a>
               </td>
               <td className="py-3 pr-4 text-yellow-500 whitespace-nowrap">{stars(c.staff_rating)}</td>
               <td className="py-3 pr-4 text-gray-700 whitespace-nowrap">{c.price_rating}/5</td>
