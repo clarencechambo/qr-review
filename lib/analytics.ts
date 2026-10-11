@@ -24,18 +24,32 @@ export function retentionStats(reviews: Review[], returns: ReturnVisit[]): Reten
   return { totalCustomers, returned, churned, retentionRate, churnRate };
 }
 
+// A review under 4 staff stars is a complaint. Price runs 1 = much cheaper to
+// 5 = much pricier, so 4+ means the customer felt it was expensive.
+export const COMPLAINT_MAX_STARS = 3;
+export const PRICE_COMPLAINT_MIN = 4;
+
+export function isComplaint(r: Pick<Review, "staff_rating">): boolean {
+  return r.staff_rating <= COMPLAINT_MAX_STARS;
+}
+
+export function isPriceComplaint(r: Pick<Review, "price_rating">): boolean {
+  return r.price_rating >= PRICE_COMPLAINT_MIN;
+}
+
 export interface AtRiskCustomer extends Review {
   reasons: string[];
 }
 
-// Flag reviews likely to churn: poor staff experience, perceived pricier, or left negative feedback.
+// Flag reviews likely to churn: a complaint-level staff rating or feeling prices were high.
+// The comment box isn't used as a signal on its own — customers sometimes leave a
+// comment and then change to a high rating, so it isn't reliably negative.
 export function atRiskCustomers(reviews: Review[]): AtRiskCustomer[] {
   const flagged: AtRiskCustomer[] = [];
   for (const r of reviews) {
     const reasons: string[] = [];
-    if (r.staff_rating <= 2) reasons.push("Low staff rating");
-    if (r.price_rating >= 4) reasons.push("Felt prices were high");
-    if (r.staff_feedback && r.staff_feedback.trim()) reasons.push("Left negative feedback");
+    if (isComplaint(r)) reasons.push("Low staff rating");
+    if (isPriceComplaint(r)) reasons.push("Felt prices were high");
     if (reasons.length) flagged.push({ ...r, reasons });
   }
   // Worst first: lowest staff rating, then highest (worst) price perception.

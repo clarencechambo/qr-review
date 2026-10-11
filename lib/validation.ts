@@ -33,6 +33,11 @@ export const submitReturnSchema = z.object({
   experience_note: z.string().min(1, "Please share your thoughts"),
 });
 
+export const reportQuerySchema = z.object({
+  type: z.enum(["week", "month"]),
+  start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "start must be YYYY-MM-DD"),
+});
+
 export const checkPhoneSchema = z.object({
   phone: z
     .string()

@@ -1,5 +1,5 @@
 import type { Review } from "@/lib/types";
-import { sentimentForRating } from "@/lib/analytics";
+import { isComplaint, sentimentForRating } from "@/lib/analytics";
 import Stars from "@/components/admin/Stars";
 import { IconUser } from "@/components/admin/icons";
 
@@ -17,7 +17,7 @@ function avatarColor(phone: string) {
 
 export default function ReviewCard({ review }: ReviewCardProps) {
   const sentiment = sentimentForRating(review.staff_rating);
-  const atRisk = review.staff_rating <= 2;
+  const atRisk = isComplaint(review);
   const color = avatarColor(review.phone_number);
 
   return (

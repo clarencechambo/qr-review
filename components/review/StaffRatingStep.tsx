@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { COMPLAINT_MAX_STARS } from "@/lib/analytics";
 
 interface StaffRatingStepProps {
   value: number | null;
@@ -37,7 +38,7 @@ export default function StaffRatingStep({
 
   function handleStarClick(rating: number) {
     onRatingChange(rating);
-    if (rating <= 2) {
+    if (rating <= COMPLAINT_MAX_STARS) {
       setModalFeedback(feedback);
       setShowFeedbackModal(true);
     }
@@ -81,7 +82,7 @@ export default function StaffRatingStep({
             {STAR_LABELS[value]}
           </p>
         )}
-        {value !== null && value <= 2 && feedback && (
+        {value !== null && value <= COMPLAINT_MAX_STARS && feedback && (
           <p className="text-sm text-gray-600 italic text-center">"{feedback}"</p>
         )}
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
